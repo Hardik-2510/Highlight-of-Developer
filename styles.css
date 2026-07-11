@@ -1,0 +1,228 @@
+/* ===== CSS Variables ===== */
+:root {
+  /* New gradient + brand colors */
+  --clr-gradient: linear-gradient(135deg, #655dff 0%, #ff6d6d 100%);
+  --clr-primary : #655dff;
+  --clr-accent  : #ff6d6d;
+
+  /* Neutral surfaces / text */
+  --clr-surface : #ffffff;
+  --clr-text    : #1a1a1d;
+
+  --gap: 1rem;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+
+  /* 🎨 Apply your gradient backdrop */
+  background: var(--clr-gradient) fixed;
+  color: var(--clr-text);
+}
+
+/* Smooth fade between slides */
+.modal-img {
+  transition: opacity .35s ease;
+  opacity: 1;
+}
+.modal-img.fade-out {
+  opacity: 0;
+}
+
+/* Visually disable arrows at ends */
+.modal-btn.disabled {
+  opacity: .25;
+  pointer-events: none;
+}
+
+
+/* === Responsive Grid === */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--gap);
+  padding: var(--gap);
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.gallery figure {
+  margin: 0;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--clr-surface);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s;
+  cursor: pointer;
+}
+.gallery figure:hover {
+  transform: translateY(-4px);
+}
+
+.gallery img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Caption overlay in grid */
+.gallery figcaption {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.85rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 0.15) 60%,
+    transparent
+  );
+  color: #ffffff;
+}
+
+/* === Modal Styles === */
+.modal {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1000;
+}
+.modal.open {
+  visibility: visible;
+  opacity: 1;
+}
+
+.modal-img {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 10px;
+  animation: zoomIn 0.35s ease;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0.5;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.modal-caption {
+  margin-top: 0.8rem;
+  text-align: center;
+  color: #eaeaea;
+  font-size: 1rem;
+}
+
+/* Nav & close buttons */
+.modal-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  font-size: 3rem;
+  line-height: 1;
+  padding: 0.4rem 0.8rem;
+  color: #ffffff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.modal-btn:hover {
+  /* subtle accent on hover */
+  color: var(--clr-accent);
+}
+
+.prev-btn {
+  left: 22px;
+}
+.next-btn {
+  right: 22px;
+}
+.close-btn {
+  top: 18px;
+  right: 30px;
+  font-size: 3.2rem;
+  transform: none;
+}
+
+/* ========== MOBILE LAYOUT TWEAKS ========== */
+@media (max-width: 600px) {
+
+  /* 1️⃣  Gallery grid:  two thumbnails per row */
+  .gallery {
+    grid-template-columns: repeat(1, 1fr);
+    gap: .75rem;
+    padding: .75rem;
+  }
+
+  /* 2️⃣  Thumbnails: remove hover lift (no cursor) */
+  .gallery figure:hover { transform: none; }
+
+  /* 3️⃣  Caption overlay: slightly taller text & backdrop */
+  .gallery figcaption {
+    padding: .5rem .7rem;
+    font-size: .95rem;
+    background: linear-gradient(to top,
+      rgba(0,0,0,.7),
+      rgba(0,0,0,.25) 60%,
+      transparent);
+  }
+
+  /* 4️⃣  Modal image: take up more screen height */
+  .modal-img {
+    max-width: 100vw;
+    max-height: 82vh;
+    border-radius: 0;               /* edge‑to‑edge look */
+  }
+
+  /* 5️⃣  Modal caption: overlay bottom of image instead of below */
+  .modal-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: .9rem .8rem .7rem;
+    background: linear-gradient(to top,
+      rgba(0,0,0,.75),
+      rgba(0,0,0,.15) 55%,
+      transparent);
+    font-size: .95rem;
+    color: #fff;
+    text-align: left;
+  }
+
+  /* 6️⃣  Navigation arrows: half‑height buttons centred vertically */
+  .modal-btn {
+    font-size: 2.5rem;
+    padding: 0 .6rem;
+  }
+  .prev-btn { left: 6px; }
+  .next-btn { right: 6px; }
+
+  /* 7️⃣  Close button: smaller and closer to top‑right edge */
+  .close-btn {
+    top: 10px;
+    right: 14px;
+    font-size: 2.4rem;
+  }
+}
